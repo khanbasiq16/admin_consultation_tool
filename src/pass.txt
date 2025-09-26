@@ -1,0 +1,5 @@
+
+Admin User
+name = Muhammad Basiq khan
+Email = khanbasiq16@gmail.com
+password = Here123@114
