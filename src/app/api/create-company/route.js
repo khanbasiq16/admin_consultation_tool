@@ -1,36 +1,56 @@
+import cloudinary from "@/lib/cloudinary";
 import { db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";  // UUID generator
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const { name, companytype  } = body;
+ 
+    const formData = await req.formData();
 
-    if (!name ) {
+    const name = formData.get("name");
+    const companyAddress = formData.get("companyAddress") || "";
+    const companyPhoneNumber = formData.get("companyPhoneNumber") || "";
+    const file = formData.get("file");
+
+    if (!name) {
       return NextResponse.json(
-        { error: "Company name aur ownerUid required hain" },
+        { error: "Company name required hai" },
         { status: 400 }
       );
     }
 
-   
+    let logoUrl = "";
+    if (file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ folder: "company_logos" }, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          })
+          .end(buffer);
+      });
+
+      logoUrl = uploadResult.secure_url;
+    }
+
     const companyId = uuidv4();
 
     await setDoc(doc(db, "companies", companyId), {
       companyId,
       name,
-      timezone: "Asia/Karachi",    
-      ipWhitelist: ["103.35.213.117" , "45.132.115.206" , "119.73.97.16" , "74.80.182.78" ],              
-      holdingPeriodDays: 120,       
-    //   latePolicy: {
-    //     graceMinutes: 10,
-    //     penaltyType: "percentage",
-    //     penaltyValue: 5,
-    //   },
-      AssignEmployee:[],
-      companytype:companytype,
+      companyAddress,
+      companyPhoneNumber,
+      companyLogo: logoUrl,
+      timezone: "Asia/Karachi",
+      AssignEmployee: [],
+      CreateClients: [],
+      contracts: [],
+      ContactTemplates: [],
       createdAt: new Date().toISOString(),
       status: "active",
     });
@@ -39,8 +59,8 @@ export async function POST(req) {
       success: true,
       message: "Company created successfully",
       companyId,
+      logo: logoUrl,
     });
-
   } catch (error) {
     console.error("POST /api/companies error:", error);
     return NextResponse.json(

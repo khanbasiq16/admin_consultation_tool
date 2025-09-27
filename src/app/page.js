@@ -1,20 +1,17 @@
-import React from 'react'
-import SuperAdminlayout from './components/Superadmin/SuperAdminlayout'
-
+import React from 'react';
+import SuperAdminlayout from './components/Superadmin/SuperAdminlayout';
+import BoxGridDashbaord from './utils/BoxGridDashbaord';
+import RevenueGraph from './utils/RevenueGraph';
+import EmployeeChart from './utils/EmployeeChart';
 const page = () => {
   return (
-    < SuperAdminlayout>
-    <div><h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1></div>
-    <div><h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1></div>
-    <div><h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1></div>
+    <SuperAdminlayout>
+      <section className='w-full'>
+       <BoxGridDashbaord/>
+       <RevenueGraph/>
+       <EmployeeChart/>
+      </section>
     </SuperAdminlayout>
-  )
-}
-
-export default page
+  );
+};
+export default page;
