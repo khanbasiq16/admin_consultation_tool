@@ -9,6 +9,7 @@ export async function POST(req) {
  
     const formData = await req.formData();
 
+
     const name = formData.get("name");
     const companyAddress = formData.get("companyAddress") || "";
     const companyPhoneNumber = formData.get("companyPhoneNumber") || "";
@@ -45,11 +46,12 @@ export async function POST(req) {
       name,
       companyAddress,
       companyPhoneNumber,
-      companyLogo: logoUrl,
+      companyLogo:logoUrl,
+      companyslug:name.toLowerCase(),
       timezone: "Asia/Karachi",
       AssignEmployee: [],
       CreateClients: [],
-      contracts: [],
+      Createcontracts: [],
       ContactTemplates: [],
       createdAt: new Date().toISOString(),
       status: "active",

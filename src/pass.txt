@@ -3,3 +3,15 @@ Admin User
 name = Muhammad Basiq khan
 Email = khanbasiq16@gmail.com
 password = Here123@114
+
+
+Emloyeee 
+Aliyan Ahmed
+Aliyandev.ro1@gmail.com
+Aliyandevro1
+
+
+Employee
+Muhammad Basiq Khan
+khanbasiq16@gmail.com
+khanbasiq16

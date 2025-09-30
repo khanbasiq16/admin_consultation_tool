@@ -4,13 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // Firestore collection reference
     const companiesRef = collection(db, "companies");
 
-    // Get all documents
     const snapshot = await getDocs(companiesRef);
 
-    // Map docs to array of objects
     const companies = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),

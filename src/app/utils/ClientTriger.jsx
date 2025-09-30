@@ -1,83 +1,17 @@
-"use client";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
+import React from 'react'
 
-const DailogTriger = () => {
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    if (selectedFile) {
-      setPreview(URL.createObjectURL(selectedFile)); 
-    } else {
-      setPreview(null);
-    }
-  };
-
-  const formHandler = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("name", e.target.name.value);
-      formData.append("companyAddress", e.target.companyAddress.value);
-      formData.append("companyPhoneNumber", e.target.companyPhoneNumber.value);
-      formData.append("stripePublic", e.target.stripePublic.value);
-      formData.append("stripePrivate", e.target.stripePrivate.value);
-      if (file) formData.append("file", file);
-
-      const res = await axios.post("/api/create-company", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      const data = res.data;
-
-      if (data.success) {
-        toast.success("Company Created Successfully");
-        e.target.reset();
-        setFile(null);
-        setPreview(null);
-
-        setOpen(false); 
-      } else {
-        alert("❌ " + data.error);
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Error creating company");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const ClientTriger = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#5965AB] text-white">+ Create Company</Button>
+        <Button className="bg-[#5965AB] text-white">+ Create Client</Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Create New Company</DialogTitle>
+          <DialogTitle>Create New Client</DialogTitle>
         </DialogHeader>
 
         <form
@@ -143,7 +77,7 @@ const DailogTriger = () => {
         </form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default DailogTriger;
+export default ClientTriger
