@@ -144,7 +144,7 @@ const Sidebar = () => {
   // Company details links
   const basePath = pathname.split("/").slice(0, 3).join("/") // /companydetails/[slug]
   const companyDetailsLinks = [
-    { href: "/companies", label: "← Back to Companies", icon: <ArrowLeft className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
+    { href: "/companies", label: "Back to Companies", icon: <ArrowLeft className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: basePath, label: "Overview", icon: <Home className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: `${basePath}/employees`, label: "Employees", icon: <IdCardLanyard className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: `${basePath}/clients`, label: "Clients", icon: <PersonStanding className="2xl:w-5 w-4 2xl:h-5 h-4" /> },

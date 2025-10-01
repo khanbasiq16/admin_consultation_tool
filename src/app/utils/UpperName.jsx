@@ -15,6 +15,7 @@ import DailogTriger from "./DailogTriger"
 import { Dialog } from "@/components/ui/dialog"
 import { useParams } from "next/navigation"
 import EmployeeTriger from "./EmployeeTriger"
+import ClientTriger from "./ClientTriger"
 
 const UpperName = ({path}) => {
   const [open, setOpen] = useState(false)
@@ -29,7 +30,11 @@ const UpperName = ({path}) => {
       </div>
       
 
-      {path="Employee"? <EmployeeTriger/> : ""}
+      {path === "Employees" ? (
+  <EmployeeTriger />
+) : path === "Client" ? (
+  <ClientTriger />
+) : null}
      
     </div>
   )

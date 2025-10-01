@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { collection, query, where, getDocs, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -11,7 +11,6 @@ export async function POST(req) {
     const employeeEmail = body.employeeemail;
     const employeePassword = body.employeepassword;
 
-    
     const q = query(collection(db, "companies"), where("companyslug", "==", companySlug));
     const querySnapshot = await getDocs(q);
 
@@ -22,7 +21,6 @@ export async function POST(req) {
     const companyDoc = querySnapshot.docs[0];
     const companyData = { id: companyDoc.id, ...companyDoc.data() };
 
-    
     let user;
     try {
       user = await createUserWithEmailAndPassword(auth, employeeEmail, employeePassword);
@@ -31,13 +29,12 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: authError.message }, { status: 400 });
     }
 
-   
     const employeeData = {
       id: user.user.uid,
       companyId: companyData.id,
       companyName: companyData.name,
       employeeName: body.employeeName,
-      employeeemail:employeeEmail,
+      employeeemail: employeeEmail,
       employeeAddress: body.employeeAddress,
       employeePhone: body.employeePhone,
       employeeCNIC: body.employeeCNIC,
@@ -56,8 +53,12 @@ export async function POST(req) {
       createdAt: serverTimestamp(),
     };
 
-    // Use setDoc to set the document ID to the UID
     await setDoc(doc(db, "employees", user.user.uid), employeeData);
+
+    // ✅ AssignEmployee Array Me Employee ID Push Kiya
+    await updateDoc(doc(db, "companies", companyData.id), {
+      AssignEmployee: arrayUnion(user.user.uid),
+    });
 
     return NextResponse.json({ success: true, uid: user.user.uid });
   } catch (error) {
