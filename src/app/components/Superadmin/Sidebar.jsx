@@ -128,6 +128,9 @@ import {
   PersonStanding,
   CardSim,
   NotepadTextDashed,
+  Users,
+  BanknoteArrowDown,
+  HandCoins,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 
@@ -139,9 +142,11 @@ const Sidebar = () => {
   const dashboardLinks = [
     { href: "/", label: "Dashboard", icon: <Home className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: "/companies", label: "Companies", icon: <Calendar className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
+    { href: "/employees", label: "Employees", icon: <Users  className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
+    { href: "/expense", label: "Expenses", icon: <BanknoteArrowDown  className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
+    { href: "/account-manager", label: "Account Manager", icon: <HandCoins className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
   ]
 
-  // Company details links
   const basePath = pathname.split("/").slice(0, 3).join("/") // /companydetails/[slug]
   const companyDetailsLinks = [
     { href: "/companies", label: "Back to Companies", icon: <ArrowLeft className="2xl:w-5 w-4 2xl:h-5 h-4" /> },

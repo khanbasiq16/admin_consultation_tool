@@ -13,20 +13,17 @@ import {
 } from "@/components/ui/dialog";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useParams } from "next/navigation";
+
 import { Eye, EyeOff } from "lucide-react";
 
-const EmployeeTrigger = () => {
+const NormalEmployeetrigger = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
 
-  const { slug } = useParams();
-  const capitalizedCompanyName = slug
-    ? slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
-    : "";
-
+  
+ 
   const validatePassword = (value) => {
     if (value.length < 6) {
       setPasswordError("Password must be at least 6 characters");
@@ -56,7 +53,7 @@ const EmployeeTrigger = () => {
     try {
       const formData = new FormData();
 
-      formData.append("companyName", slug);
+      
       formData.append("employeeName", e.target.employeeName.value);
       formData.append("employeeAddress", e.target.employeeAddress.value);
       formData.append("employeeemail", e.target.employeeemail.value);
@@ -73,7 +70,7 @@ const EmployeeTrigger = () => {
       formData.append("totalWorkingHours", e.target.totalWorkingHours?.value || "");
       formData.append("dateOfJoining", e.target.dateOfJoining.value);
 
-      const res = await axios.post("/api/create-employee", formData, {
+      const res = await axios.post("/api/create-office-employee", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -98,18 +95,14 @@ const EmployeeTrigger = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-[#5965AB] text-white font-semibold rounded-md px-4 py-2">
-          + Create Company Employee
+          + Create Office Employee
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>Create New Employee</DialogTitle>
-          {capitalizedCompanyName && (
-            <p className="text-sm text-gray-500 mt-1">
-              Company: <span className="font-semibold">{capitalizedCompanyName}</span>
-            </p>
-          )}
+         
         </DialogHeader>
 
         <form
@@ -171,6 +164,7 @@ const EmployeeTrigger = () => {
               <Input id="employeeSalary" name="employeeSalary" placeholder="Enter salary" />
             </div>
 
+            {/* ✅ Updated Time Inputs (No AM/PM Dropdowns) */}
             <TimeInput label="Check In Time" name="checkInTime" />
             <TimeInput label="Grace Time" name="graceTime" />
             <TimeInput label="Check Out Time" name="checkOutTime" />
@@ -198,7 +192,7 @@ const EmployeeTrigger = () => {
   );
 };
 
-export default EmployeeTrigger;
+export default NormalEmployeetrigger;
 
 // ✅ Optimized Time Input (No AM/PM dropdown)
 const TimeInput = ({ label, name }) => (

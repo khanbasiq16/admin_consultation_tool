@@ -10,9 +10,8 @@ export async function POST(req) {
       return NextResponse.json({ success: false, message: "Missing fields" }, { status: 400 });
     }
 
-    const slug = companyId; // companyId is actually slug
+    const slug = companyId;
 
-    // ✅ Find company by slug
     const companiesRef = collection(db, "companies");
     const q = query(companiesRef, where("companyslug", "==", slug));
     const companySnapshot = await getDocs(q);
@@ -24,7 +23,7 @@ export async function POST(req) {
     const companyDoc = companySnapshot.docs[0];
     const companyRef = doc(db, "companies", companyDoc.id);
 
-    // ✅ Update company's admin array
+   
     await updateDoc(companyRef, {
       companyAdmin: arrayUnion({
         employeeId,
@@ -32,11 +31,11 @@ export async function POST(req) {
       }),
     });
 
-    // ✅ Update employee's companyData
+ 
     const employeeRef = doc(db, "employees", employeeId);
     await updateDoc(employeeRef, {
       companyData: arrayUnion({
-        companyId: companyDoc.id, // actual company doc id
+        companyId: companyDoc.id, 
         compuser: slug,
         securityKey,
       }),

@@ -16,6 +16,8 @@ import { Dialog } from "@/components/ui/dialog"
 import { useParams } from "next/navigation"
 import EmployeeTriger from "./EmployeeTriger"
 import ClientTriger from "./ClientTriger"
+import Templatetrigger from "./Templatetrigger"
+import ContractFormDialog from "./ContractFormDialog"
 
 const UpperName = ({path}) => {
   const [open, setOpen] = useState(false)
@@ -26,7 +28,7 @@ const UpperName = ({path}) => {
       {/* Left - Company Name */}
       <div className="flex flex-col gap-0">
       <h2 className="text-lg font-semibold text-gray-700">{path}</h2>
-      <p className="text-gray opacity-80 text-xs">home {">"} {slug} {">"} {path.toLowerCase()}</p>
+      <p className="text-gray opacity-80 text-xs">home {">"} {slug} {slug ? ">" : ""} {path.toLowerCase()}</p>
       </div>
       
 
@@ -34,6 +36,10 @@ const UpperName = ({path}) => {
   <EmployeeTriger />
 ) : path === "Client" ? (
   <ClientTriger />
+) : path === "Templates" ? (
+  // <Templatetrigger />
+  <ContractFormDialog />
+
 ) : null}
      
     </div>

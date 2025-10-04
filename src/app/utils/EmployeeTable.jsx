@@ -34,108 +34,13 @@ import {
 
 export function EmployeeTable({employees}) {
 
-    console.log(employees)
+   
   const [sorting, setSorting] = React.useState([])
   const [columnFilters, setColumnFilters] = React.useState([])
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   
-// const columns = [
-//   {
-//     id: "select",
-//     header: ({ table }) => (
-//       <Checkbox
-//         checked={
-//           table.getIsAllPageRowsSelected() ||
-//           (table.getIsSomePageRowsSelected() && "indeterminate")
-//         }
-//         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <Checkbox
-//         checked={row.getIsSelected()}
-//         onCheckedChange={(value) => row.toggleSelected(!!value)}
-//       />
-//     ),
-//     enableSorting: false,
-//     enableHiding: false,
-//   },
-//   {
-//     accessorKey: "employeeName",
-//     header: "Name",
-//     cell: ({ row }) => <div className="capitalize">{row.getValue("employeeName")}</div>,
-//   },
-//   {
-//     accessorKey: "employeeemail",
-//     header: ({ column }) => (
-//       <Button
-//         variant="ghost"
-//         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-//       >
-//         Email
-//         <ArrowUpDown />
-//       </Button>
-//     ),
-//     cell: ({ row }) => <div className="lowercase">{row.getValue("employeeemail")}</div>,
-//   },
-//   {
-//     accessorKey: "employeePhone",
-//     header: "Phone",
-//     cell: ({ row }) => <div>{row.getValue("employeePhone")}</div>,
-//   },
-//   {
-//     accessorKey: "employeeCNIC",
-//     header: "CNIC",
-//     cell: ({ row }) => <div>{row.getValue("employeeCNIC")}</div>,
-//   },
-//   {
-//     accessorKey: "dateOfJoining",
-//     header: "Joining Date",
-//     cell: ({ row }) => <div>{row.getValue("dateOfJoining")}</div>,
-//   },
-//   {
-//     accessorKey: "checkInTime",
-//     header: "Check In",
-//     cell: ({ row }) => <div>{row.getValue("checkInTime")}</div>,
-//   },
-//   {
-//     accessorKey: "checkOutTime",
-//     header: "Check Out",
-//     cell: ({ row }) => <div>{row.getValue("checkOutTime")}</div>,
-//   },
-//   {
-//     accessorKey: "graceTime",
-//     header: "Grace Time",
-//     cell: ({ row }) => <div>{row.getValue("graceTime")}</div>,
-//   },
-//   {
-//     id: "actions",
-//     enableHiding: false,
-//     cell: ({ row }) => {
-//       const emp = row.original
-//       return (
-//         <DropdownMenu>
-//           <DropdownMenuTrigger asChild>
-//             <Button variant="ghost" className="h-8 w-8 p-0">
-//               <MoreHorizontal />
-//             </Button>
-//           </DropdownMenuTrigger>
-//           <DropdownMenuContent align="end">
-//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-//             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(emp.employeeemail)}>
-//               Copy Email
-//             </DropdownMenuItem>
-//             <DropdownMenuSeparator />
-//             <DropdownMenuItem>View Details</DropdownMenuItem>
-//             <DropdownMenuItem>Edit Employee</DropdownMenuItem>
-//           </DropdownMenuContent>
-//         </DropdownMenu>
-//       )
-//     },
-//   },
-// ];
 
 
 const columns = [
@@ -254,6 +159,7 @@ const columns = [
     },
   },
 ];
+
 
   const table = useReactTable({
     data:employees,

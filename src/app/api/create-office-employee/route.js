@@ -6,20 +6,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 export async function POST(req) {
   try {
     const body = await req.json(); 
-
-    const companySlug = body.companyName;
     const employeeEmail = body.employeeemail;
     const employeePassword = body.employeepassword;
-
-    const q = query(collection(db, "companies"), where("companyslug", "==", companySlug));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      return NextResponse.json({ success: false, error: "Company not found" }, { status: 404 });
-    }
-
-    const companyDoc = querySnapshot.docs[0];
-    const companyData = { id: companyDoc.id, ...companyDoc.data() };
 
     let user;
     try {
@@ -31,8 +19,6 @@ export async function POST(req) {
 
     const employeeData = {
       id: user.user.uid,
-      companyId: companyData.id,
-      companyName: companyData.name,
       employeeName: body.employeeName,
       employeeemail: employeeEmail,
       employeeAddress: body.employeeAddress,
@@ -46,19 +32,12 @@ export async function POST(req) {
       dateOfJoining: body.dateOfJoining,
       ipwhitelist: ["74.80.182.78", "103.35.213.126", "119.73.104.152", "45.132.115.211"],
       Attendance: [],
-      isSalesEmployee: true,
-      isCompanyAdmin: false,
-      sales: [],
-      editedcontracts: [],
+      isSalesEmployee: false,
       createdAt: serverTimestamp(),
     };
 
     await setDoc(doc(db, "employees", user.user.uid), employeeData);
 
- 
-    await updateDoc(doc(db, "companies", companyData.id), {
-      AssignEmployee: arrayUnion(user.user.uid),
-    });
 
     return NextResponse.json({ success: true, uid: user.user.uid });
   } catch (error) {

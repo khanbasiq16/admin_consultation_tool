@@ -7,7 +7,7 @@ import ClientTrigger from "./ClientTriger";
 import { Clienttable } from "./Clienttable";
 
 const ClientDashboard = () => {
-  const [clients, setClients] = useState([]); // ✅ corrected
+  const [clients, setClients] = useState([]); 
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
 
