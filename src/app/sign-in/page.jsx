@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Loader2, Eye, EyeOff } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -51,8 +52,8 @@ export default function Page() {
     setLoading(true)
     try {
       const response = await axios.post("/api/signin", formData)
-      if (response.status === 200) {
-        setMessage("Sign in successful!")
+      if (response.success) {
+        toast.success("Sign in successful!")
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Something went wrong")
