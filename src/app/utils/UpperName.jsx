@@ -37,8 +37,8 @@ const UpperName = ({path}) => {
 ) : path === "Client" ? (
   <ClientTriger />
 ) : path === "Templates" ? (
-  // <Templatetrigger />
-  <ContractFormDialog />
+  <Templatetrigger />
+  // <ContractFormDialog />
 
 ) : null}
      

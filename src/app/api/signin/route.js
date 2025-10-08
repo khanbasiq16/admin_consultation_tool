@@ -36,7 +36,6 @@ export async function POST(req) {
       success: true,
       message: "User created",
       uid: user.uid,
-      
     });
 
   } catch (error) {

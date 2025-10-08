@@ -515,7 +515,7 @@ export default function TemplateTrigger() {
   return (
     <Dialog >
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white  font-semibold py-2 px-4 rounded-lg shadow-md">
+        <Button className="bg-[#5965AB] text-white  font-semibold py-2 px-4 rounded-lg shadow-md">
           Open Modern Template Editor
         </Button>
       </DialogTrigger>

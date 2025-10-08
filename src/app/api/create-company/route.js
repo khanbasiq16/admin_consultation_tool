@@ -47,7 +47,7 @@ export async function POST(req) {
       companyAddress,
       companyPhoneNumber,
       companyLogo:logoUrl,
-      companyslug:name.toLowerCase(),
+      companyslug: name.toLowerCase().replace(/\s+/g, '-'),
       timezone: "Asia/Karachi",
       AssignEmployee: [],
       CreateClients: [],

@@ -5,6 +5,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   updateDoc,
@@ -22,8 +23,6 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
-    console.log(body);
 
     let user;
     try {
@@ -50,54 +49,55 @@ export async function POST(req) {
       );
     }
 
-    // let employee = null;
-    // let docId = null;
-    // snapshot.forEach((docSnap) => {
-    //   employee = docSnap.data();
-    //   docId = docSnap.id;
-    // });
+    let employee = null;
+    let docId = null;
+    snapshot.forEach((docSnap) => {
+      employee = docSnap.data();
+      docId = docSnap.id;
+    });
 
-    // if (!employee.ipwhitelist.includes(ip)) {
-    //   return NextResponse.json({ error: "Access denied: IP not allowed" }, { status: 403 });
-    // }
+    if (!employee.ipwhitelist.includes(ip)) {
+      return NextResponse.json({ error: "Access denied: IP not allowed" }, { status: 403 });
+    }
 
-    // if (employee.isCompanyAdmin) {
-    //   return NextResponse.json({ success: true, message: "Company Admin Logged In", employee });
-    // }
+    if (employee.isCompanyAdmin) {
+      return NextResponse.json({ success: true, message: "Company Admin Logged In", employee });
+    }
 
-    // // ---- Grace Time Logic ----
-    // const formatTimeToDate = (t) => {
-    //   const [timeStr, modifier] = t.split(" ");
-    //   let [hours, minutes] = timeStr.split(":").map(Number);
+  
+    const formatTimeToDate = (t) => {
+      const [timeStr, modifier] = t.split(" ");
+      let [hours, minutes] = timeStr.split(":").map(Number);
 
-    //   if (modifier === "PM" && hours !== 12) {
-    //     hours += 12;
-    //   }
-    //   if (modifier === "AM" && hours === 12) {
-    //     hours = 0;
-    //   }
+      if (modifier === "PM" && hours !== 12) {
+        hours += 12;
+      }
 
-    //   const d = new Date();
-    //   d.setHours(hours, minutes, 0, 0);
-    //   return d;
-    // };
+      if (modifier === "AM" && hours === 12) {
+        hours = 0;
+      }
 
-    // const checkIn = formatTimeToDate(time);
-    // const officeTime = formatTimeToDate("9:00 PM");
-    // const graceTime = formatTimeToDate("9:15 PM");
+      const d = new Date();
+      d.setHours(hours, minutes, 0, 0);
+      return d;
+    };
 
-    // let status = "Present";
-    // if (checkIn > graceTime) {
-    //   status = "Late";
-    // }
+    const checkIn = formatTimeToDate(time);
+    const officeTime = formatTimeToDate(employee.checkInTime);
+    const graceTime = formatTimeToDate(employee.graceTime);
 
-    // await updateDoc(doc(db, "employees", docId), {
-    //   Attendance: arrayUnion({
-    //     date,
-    //     checkInTime: time,
-    //     status,
-    //   }),
-    // });
+    let status = "Present";
+    if (checkIn > graceTime) {
+      status = "Late";
+    }
+
+    await updateDoc(doc(db, "employees", docId), {
+      Attendance: arrayUnion({
+        date,
+        checkInTime: time,
+        status,
+      }),
+    });
 
     return NextResponse.json({
       success: true,
@@ -105,6 +105,7 @@ export async function POST(req) {
       role: "employee",
       employee,
     });
+
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

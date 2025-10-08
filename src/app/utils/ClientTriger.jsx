@@ -79,71 +79,7 @@ const ClientTrigger = () => {
           )}
         </DialogHeader>
 
-        {/* <form
-          onSubmit={formHandler}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 max-h-[80vh] overflow-y-auto p-2"
-        >
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="clientName">Client Name</Label>
-              <Input id="clientName" name="clientName" placeholder="Enter client name" required />
-            </div>
-
-            <div>
-              <Label htmlFor="clientAddress">Address</Label>
-              <Input id="clientAddress" name="clientAddress" placeholder="Enter address" required />
-            </div>
-
-            <div>
-              <Label htmlFor="clientEmail">Email</Label>
-              <Input id="clientEmail" name="clientEmail" type="email" placeholder="Enter email" required />
-            </div>
-
-            <div>
-              <Label htmlFor="clientPhone">Phone Number</Label>
-              <Input id="clientPhone" name="clientPhone" placeholder="Enter phone number" required />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="projectsDetails">Projects Details</Label>
-              <textarea
-                id="projectsDetails"
-                name="projectsDetails"
-                placeholder="Enter project details"
-                rows={4}
-                className="w-full px-4 py-3 border rounded-md resize-none"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="packageDetails">Package Details</Label>
-              <textarea
-                id="packageDetails"
-                name="packageDetails"
-                placeholder="Enter package details"
-                rows={4}
-                className="w-full px-4 py-3 border rounded-md resize-none"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="clientWebsite">Website</Label>
-              <Input id="clientWebsite" name="clientWebsite" placeholder="Enter client website" />
-            </div>
-          </div>
-
-          <DialogFooter className="col-span-2 flex justify-end mt-2">
-            <Button
-              type="submit"
-              className="bg-[#5965AB] text-white font-semibold px-6 py-2"
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save"}
-            </Button>
-          </DialogFooter>
-        </form> */}
+       
 
         <form
   onSubmit={formHandler}
