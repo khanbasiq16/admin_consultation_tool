@@ -44,7 +44,6 @@ export async function POST(req) {
       checkOutTime: body.checkOutTime,
       totalWorkingHours: body.totalWorkingHours,
       dateOfJoining: body.dateOfJoining,
-      ipwhitelist: ["74.80.182.78", "103.35.213.126", "119.73.104.152", "45.132.115.211"],
       Attendance: [],
       isSalesEmployee: true,
       isCompanyAdmin: false,

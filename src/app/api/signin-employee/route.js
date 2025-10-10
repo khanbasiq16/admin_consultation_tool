@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
 import {
   arrayUnion,
   collection,
@@ -11,6 +9,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export async function POST(req) {
   try {
@@ -25,19 +25,21 @@ export async function POST(req) {
     }
 
     let user;
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      user = userCredential.user;
-    } catch (err) {
+
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    user = userCredential.user;
+
+    if (!user) {
       return NextResponse.json(
-        { error: "Invalid credentials" },
+        { message: "Authentication failed Invalid Credentials" },
         { status: 401 }
       );
     }
+
 
     const userDoc = await getDoc(doc(db, "employees", user.uid));
     const userData = userDoc.exists() ? userDoc.data() : {};
@@ -49,49 +51,53 @@ export async function POST(req) {
       );
     }
 
-    let employee = null;
-    let docId = null;
-    snapshot.forEach((docSnap) => {
-      employee = docSnap.data();
-      docId = docSnap.id;
-    });
 
-    if (!employee.ipwhitelist.includes(ip)) {
-      return NextResponse.json({ error: "Access denied: IP not allowed" }, { status: 403 });
+    const listDoc = await getDoc(doc(db, "ipwhitelist", "list"));
+
+    if (!listDoc.exists()) {
+      return NextResponse.json(
+        { error: "IP whitelist not found" },
+        { status: 404 }
+      );
     }
 
-    if (employee.isCompanyAdmin) {
-      return NextResponse.json({ success: true, message: "Company Admin Logged In", employee });
+    const allowedIps = listDoc.data().ip || [];
+
+    if (!allowedIps.includes(ip)) {
+      return NextResponse.json(
+        { error: "Access denied: IP not allowed", ip },
+        { status: 403 }
+      );
     }
 
-  
     const formatTimeToDate = (t) => {
+      if (!t) return null;
+
       const [timeStr, modifier] = t.split(" ");
       let [hours, minutes] = timeStr.split(":").map(Number);
 
-      if (modifier === "PM" && hours !== 12) {
-        hours += 12;
-      }
-
-      if (modifier === "AM" && hours === 12) {
-        hours = 0;
-      }
+      if (modifier.toUpperCase() === "PM" && hours !== 12) hours += 12;
+      if (modifier.toUpperCase() === "AM" && hours === 12) hours = 0;
 
       const d = new Date();
       d.setHours(hours, minutes, 0, 0);
       return d;
     };
 
-    const checkIn = formatTimeToDate(time);
-    const officeTime = formatTimeToDate(employee.checkInTime);
-    const graceTime = formatTimeToDate(employee.graceTime);
+    const checkInDate = formatTimeToDate(time);
+    const graceDate = formatTimeToDate(userData.graceTime);
+    const officeDate = formatTimeToDate(userData.checkInTime);
+
+    if (officeDate.getHours() > 12 && checkInDate.getHours() < 12) {
+      checkInDate.setDate(checkInDate.getDate() + 1);
+    }
 
     let status = "Present";
-    if (checkIn > graceTime) {
+    if (checkInDate > graceDate) {
       status = "Late";
     }
 
-    await updateDoc(doc(db, "employees", docId), {
+    await updateDoc(doc(db, "employees", user.uid), {
       Attendance: arrayUnion({
         date,
         checkInTime: time,
@@ -99,12 +105,35 @@ export async function POST(req) {
       }),
     });
 
+    if (userData?.isCompanyAdmin) {
+      return NextResponse.json({
+        success: true,
+        message: "Company Admin Logged In",
+        User: userData,
+        IsCompanyAdmin: userData?.isCompanyAdmin,
+      });
+    }
+
+    if (userData?.isSalesEmployee) {
+      const companyDoc = await getDoc(doc(db, "companies", userData?.companyId));
+      const companyData = companyDoc.exists() ? companyDoc.data() : {};
+
+      
+      return NextResponse.json({
+        success: true,
+        message: "Sales Employee Logged In",
+        User: userData,
+        IsSalesEmployee: userData?.isSalesEmployee,
+        Company: companyData,
+      });
+    }
+
     return NextResponse.json({
       success: true,
-      message: `Attendance Marked as ${status}`,
-      role: "employee",
-      employee,
+      message: `Employee Logged In`,
+      User: userData,
     });
+
 
   } catch (error) {
     console.error("Error:", error);

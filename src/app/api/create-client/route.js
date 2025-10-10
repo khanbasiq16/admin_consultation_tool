@@ -18,7 +18,7 @@ export async function POST(req) {
     }
 
     const companyDoc = querySnapshot.docs[0];
-    const companyData = { id: companyDoc.id, ...companyDoc.data() };
+    const companyData = { id: companyDoc.id, ...companyDoc.data()};
 
    
     const clientId = uuidv4();

@@ -1,25 +1,23 @@
 "use client"
+import React, { useState } from 'react'
+import axios from 'axios'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Loader2, Eye, EyeOff } from 'lucide-react'
-import axios from 'axios'
-import React, { useState } from 'react'
-import toast from "react-hot-toast"
-import { useRouter } from "next/navigation"
+import toast from 'react-hot-toast'
 
-
-const page = () => {
-    const router = useRouter()
-      const [formData, setFormData] = useState({
+export default function Page() {
+  const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: ""
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [errors, setErrors] = useState({ email: "", password: "" })
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false) 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })
@@ -53,29 +51,32 @@ const page = () => {
 
     setLoading(true)
     try {
-      const response = await axios.post("/api/signup", formData)
-      if (response.data.success) {
-        toast.success(response.data.message)
-        router.push("/")
+      const response = await axios.post("/api/signin", formData)
+      if (response.success) {
+        toast.success("Sign in successful!")
       }
     } catch (error) {
-        console.log(error)
-      toast.error(error.message )
+      setMessage(error.response?.data?.message || "Something went wrong")
     } finally {
       setLoading(false)
     }
   }
+
   return (
-   <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Hr Admin Consultation Tool</CardTitle>
-          <CardDescription>Enter your details to sign up</CardDescription>
+          <CardDescription>Enter your details to sign in</CardDescription>
         </CardHeader>
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-           
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="Enter name" value={formData.name} onChange={handleChange} />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="Enter email" value={formData.email} onChange={handleChange} />
@@ -117,5 +118,3 @@ const page = () => {
     </div>
   )
 }
-
-export default page

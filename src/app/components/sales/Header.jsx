@@ -3,12 +3,18 @@ import React from "react"
 import { Input } from "@/components/ui/input"
 import { Bell, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useSelector } from "react-redux"
 const Header = () => {
   const pathname = usePathname()
+    const { user } = useSelector((state) => state.User);
+
+    console.log(user)
   const links = [
     { href: "/", label: "Dashboard" },
     { href: "/companies", label: "Companies" },
   ]
+
+  
   const activePage = links.find((link) => link.href === pathname)?.label || "Dashboard"
   return (
     <div className="pt-6 overflow-hidden z-30 fixed w-full bg-[#F6F6F6]">
@@ -45,17 +51,20 @@ const Header = () => {
             </button>
 
 
-            <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/150?img=32"
-                alt="User Avatar"
-                className="w-9 h-9 rounded-full"
-              />
-              <div className="leading-tight">
-                <p className="font-medium text-sm">Aliyan Ahmed</p>
-                <p className="text-xs text-gray-500">aliyan@gmail.com</p>
-              </div>
-            </div>
+           <div className=" hidden lg:flex items-center  gap-3">
+  <div className="leading-tight">
+    <p className="font-medium text-sm flex items-center gap-1">
+      {user?.employeeName}
+    {user?.isCompanyAdmin === false && (
+  <span className="text-gray-500 text-xs">
+    (Employee)
+  </span>
+)}
+
+    </p>
+    <p className="text-xs text-gray-500">{user?.employeeemail}</p>
+  </div>
+</div>
           </div>
         </div>
       </header>

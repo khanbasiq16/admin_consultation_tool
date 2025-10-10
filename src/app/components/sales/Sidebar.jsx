@@ -16,11 +16,12 @@ import { usePathname } from "next/navigation"
 const Sidebar = () => {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  
 
 
   const salesBasePath = pathname.split("/").slice(0, 3).join("/") 
   const salesLinks = [
-    { href: "/sales", label: "Overview", icon: <Home className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
+    { href: `/sales`, label: "Overview", icon: <Home className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: `${salesBasePath}/invoices`, label: "Invoices", icon: <DollarSign className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: `${salesBasePath}/attendance`, label: "Attendance", icon: <Users className="2xl:w-5 w-4 2xl:h-5 h-4" /> },
     { href: `${salesBasePath}/contracts`, label: "Contracts", icon: <Calendar className="2xl:w-5 w-4 2xl:h-5 h-4" /> },

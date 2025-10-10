@@ -3,8 +3,12 @@ import React from "react"
 import { Input } from "@/components/ui/input"
 import { Bell, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useSelector } from "react-redux"
 const Header = () => {
   const pathname = usePathname()
+  const { user } = useSelector((state) => state.User);
+
+  console.log(user)
   // same links jese Sidebar me use ho rahe hain
   const links = [
     { href: "/", label: "Dashboard" },
@@ -46,17 +50,21 @@ const Header = () => {
               <span className="absolute top-0 right-0 block w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
             {/* User */}
-            <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/150?img=32"
-                alt="User Avatar"
-                className="w-9 h-9 rounded-full"
-              />
-              <div className="leading-tight">
-                <p className="font-medium text-sm">Aliyan Ahmed</p>
-                <p className="text-xs text-gray-500">aliyan@gmail.com</p>
-              </div>
-            </div>
+          <div className=" hidden lg:flex items-center  gap-3">
+  <div className="leading-tight">
+    <p className="font-medium text-sm flex items-center gap-1">
+      {user?.name}
+    {user?.role && (
+  <span className="text-gray-500 text-xs">
+    ({user?.role.charAt(0).toUpperCase() + user?.role.slice(1).replace(/\s+/g, "")})
+  </span>
+)}
+
+    </p>
+    <p className="text-xs text-gray-500">{user?.email}</p>
+  </div>
+</div>
+
           </div>
         </div>
       </header>

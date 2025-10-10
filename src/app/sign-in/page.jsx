@@ -1,23 +1,30 @@
 "use client"
-import React, { useState } from 'react'
-import axios from 'axios'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Loader2, Eye, EyeOff } from 'lucide-react'
-import toast from 'react-hot-toast'
+import axios from 'axios'
+import React, { useState } from 'react'
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { loginSuccess } from "@/features/Slice/UserSlice"
 
-export default function Page() {
-  const [formData, setFormData] = useState({
-    name: "",
+
+const page = () => {
+    const router = useRouter()
+
+    const dispatch = useDispatch();
+
+      const [formData, setFormData] = useState({
     email: "",
     password: ""
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [errors, setErrors] = useState({ email: "", password: "" })
-  const [showPassword, setShowPassword] = useState(false) // 👈 toggle state
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })
@@ -51,32 +58,30 @@ export default function Page() {
 
     setLoading(true)
     try {
-      const response = await axios.post("/api/signin", formData)
-      if (response.success) {
-        toast.success("Sign in successful!")
+      const response = await axios.post("/api/signup", formData)
+      if (response.data.success) {
+        toast.success(response.data.message)
+        dispatch(loginSuccess(response.data.user));
+        router.push("/")
       }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong")
+        console.log(error)
+      toast.error(error.message )
     } finally {
       setLoading(false)
     }
   }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+   <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Hr Admin Consultation Tool</CardTitle>
-          <CardDescription>Enter your details to sign in</CardDescription>
+          <CardDescription>Enter your details to sign up</CardDescription>
         </CardHeader>
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Enter name" value={formData.name} onChange={handleChange} />
-            </div>
-
+           
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="Enter email" value={formData.email} onChange={handleChange} />
@@ -118,3 +123,5 @@ export default function Page() {
     </div>
   )
 }
+
+export default page

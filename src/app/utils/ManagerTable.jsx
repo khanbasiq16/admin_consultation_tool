@@ -123,7 +123,7 @@ export const ManagerTable = ({managers}) => {
   });
   return (
     <section className="w-full bg-white my-6 ">
-      {/* Search Filter */}
+     
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by name..."

@@ -7,7 +7,7 @@ const page = () => {
     <>
      <SalesLayout>
       <section className='w-full'>
-        <SalesName/>
+        <SalesName path={"Invoice"}/>
       </section> 
     </SalesLayout>
     </>
